@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ignite Practice Tool</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <style>
+      .msg {
+        display:none
+      }
+    .done .msg {
+      display:block;
+    }
+    
+    body {
+      text-align:center;
+      font-size:28px;
+      font-family:sans-serif;
+      background:#111;
+      color:#fff;
+    }
+    
+    body.done {
+      background:green;
+      color:#fff;
+    }
+    
+    button {
+      font-size:1.25em;
+      padding:.5em 1em;
+      border:0;
+      cursor:pointer;
+      margin-bottom:.5em;
+    }
+        
+    button:hover {
+      background:#fff;
+    }    
+    button.playing {
+      background:green;
+    }
+    
+    .muted {
+      color:#aaa;
+    }
+    
+    small.muted {
+      color:#555;
+    }
+    
+    .description {
+      font-size:.5em;
+      max-width:40em;
+      text-align:left;
+      margin:0 auto;
+      color:#aaa;
+      background:#222;
+      line-height:1.6em;
+      padding:1em;
+    }
+    .description a {
+      color:#eee;
+
+    }
+  </style>
+</head>
+<body>
+  
+  <h1>Ignite Practice Tool</h1>
+  
+  <p class='description'>
+    A super-simple tool for pracitcing the pacing of your <a href='http://ignitetalks.io'>Ignite talks</a>. Simulates polite applause at the beginning and end as well as an audio notification when your slide changes. 20 slides, 15 seconds each.
+  </p>
+    
+  <p>
+    <span class='muted title'>CURRENT SLIDE</span><br>
+    <span id="slide-display">1</span> / 20
+  </p>
+
+  <p>
+    <span class='muted'>Time Elapsed</span><br>
+    <span id="timer-display">0</span> seconds<br>
+  </p>
+  
+
+  <button id="start-practice">Start</button>  <button id="restart">Restart</button>
+
+  <p>
+    <small class='muted'>Press space to start/pause and "R" to restart.</small>
+  </p>
+  
+  <h2 class='msg'>You're done!</h2>
+  
+  
+  <script>
+  (function(){
+    var sound = new Audio(),
+        cheer = new Audio(),
+        start = document.getElementById('start-practice'),
+        restart =document.getElementById('restart'),
+        timer_display = document.getElementById('timer-display'),
+        slide_display = document.getElementById('slide-display'),
+        slide_timer = null,
+        total_time = 0,
+        current_slide = 1;
+
+        // https://www.freesound.org/people/Aiwha/sounds/196106/
+        sound.src = 'sounds/ding.mp3';
+    
+        // https://www.freesound.org/people/Sandermotions/sounds/277021/
+        cheer.src = 'sounds/cheer.mp3'
+    
+        cheer.play()
+
+    restart.addEventListener('click', function(){
+      location.reload();
+    });
+
+    document.addEventListener('keypress', function(e){
+      start.blur();
+      if (e.key == 'r') location.reload();
+      if (e.code == 'Space') manageClock();
+    });
+
+    start.addEventListener('click', manageClock);
+
+    function manageClock() {
+      if (start.className == "") {
+        if (start.innerText == 'Start') sound.play();
+        start.className="playing";
+        start.innerText="Pause";
+    
+        slide_timer = setInterval(function(){
+          // count and display seconds
+          total_time++;
+          timer_display.innerText = total_time;        
+
+          // slide change every 15 seconds
+          if (total_time % 15 === 0) {
+            sound.play();            
+            current_slide++;
+    
+            if (current_slide > 20) {
+              clearInterval(slide_timer);
+              document.body.className = 'done';
+              cheer.play();
+            }else{
+             slide_display.innerText = current_slide; 
+            }          
+          } 
+        },1000);    
+          
+      }else{
+        start.className="";
+        start.innerText="Resume";
+        clearInterval(slide_timer);
+      }  
+    }     
+  })();
+  </script>
+</body>
+</html>
