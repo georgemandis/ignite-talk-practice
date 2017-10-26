@@ -72,7 +72,7 @@
   <h1>Ignite Practice Tool</h1>
   
   <p class='description'>
-    A super-simple tool for pracitcing the pacing of your <a href='http://ignitetalks.io'>Ignite talks</a>. Simulates polite applause at the beginning and end as well as an audio notification when your slide changes. 20 slides, 15 seconds each.
+    A simple tool for practicing the pacing of your <a href='http://ignitetalks.io'>Ignite talks</a>. Simulates polite applause at the beginning and end as well as an audio notification when your slides change. 20 slides, 15 seconds each.
   </p>
     
   <p>
@@ -100,7 +100,7 @@
     var sound = new Audio(),
         cheer = new Audio(),
         start = document.getElementById('start-practice'),
-        restart =document.getElementById('restart'),
+        restart = document.getElementById('restart'),
         timer_display = document.getElementById('timer-display'),
         slide_display = document.getElementById('slide-display'),
         slide_timer = null,
@@ -129,7 +129,7 @@
 
     function manageClock() {
       if (start.className == "") {
-        if (start.innerText == 'Start') sound.play();
+        if (start.innerText == "Start") sound.play();
         start.className="playing";
         start.innerText="Pause";
     
